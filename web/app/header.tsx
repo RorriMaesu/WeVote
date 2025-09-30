@@ -51,7 +51,7 @@ export default function Header() {
     }
   }, [open]);
   return (
-    <header className="sticky top-0 z-40 backdrop-blur border-b bg-[var(--bg)]/80">
+  <header className="sticky top-0 z-40 backdrop-blur border-b bg-[var(--bg)]">
       <div className="max-w-7xl mx-auto flex items-center gap-4 py-3 px-4">
         <a href="#main" className="sr-only focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-brand-teal/40 px-2 py-1 rounded bg-white/70 dark:bg-black/40 text-xs">Skip to content</a>
         <span className="font-bold text-lg tracking-tight" style={{color:'var(--text)'}}>WeVote</span>
@@ -76,7 +76,7 @@ export default function Header() {
         </div>
       </div>
       {open && (
-        <div className="md:hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading">
+  <div className="md:hidden fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading">
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={()=> setOpen(false)} aria-hidden="true" />
           {/* Panel */}
@@ -85,8 +85,8 @@ export default function Header() {
             id="mobile-nav-panel"
             tabIndex={-1}
             className="fixed top-0 right-0 h-full w-72 max-w-[80%] flex flex-col p-5 gap-4 animate-slideIn
-                       border-l shadow-xl overflow-y-auto text-[var(--text)] z-50
-                       bg-[var(--panel-bg)] backdrop-blur-lg border-[var(--border)]"
+                       border-l shadow-xl overflow-y-auto text-[var(--text)] z-[61]
+                       bg-[var(--panel-bg)] border-[var(--border)]"
             /* TODO: remove explicit border if design opts for borderless panel */
           >
             <div className="flex items-center justify-between pr-1">
@@ -95,7 +95,7 @@ export default function Header() {
                 <svg width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round"><path d="M4 4l10 10M14 4L4 14" /></svg>
               </button>
             </div>
-            <nav className="flex flex-col gap-1 text-sm" aria-label="Mobile navigation">
+            <nav className="flex flex-col gap-1 text-sm text-[var(--text)]" aria-label="Mobile navigation">
               {NAV_LINKS.map(item => (
                 <a
                   key={item.href}
