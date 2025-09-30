@@ -2,6 +2,15 @@
 import { useState, useEffect, useRef } from 'react';
 import ThemeToggle from './theme-toggle';
 
+// Central nav configuration so desktop & mobile stay in sync
+const NAV_LINKS: { href: string; label: string }[] = [
+  { href: '/', label: 'Home' },
+  { href: '/concern/new', label: 'Create Concern' },
+  { href: '/ballots', label: 'Ballots' },
+  { href: '/transparency', label: 'Transparency' },
+  { href: '/verify', label: 'Verify' }
+];
+
 // Accessible focus trap helper for the temporary mobile menu
 function useFocusTrap(active: boolean, containerRef: React.RefObject<HTMLDivElement>, onExit: () => void) {
   useEffect(() => {
@@ -29,10 +38,23 @@ function useFocusTrap(active: boolean, containerRef: React.RefObject<HTMLDivElem
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   useFocusTrap(open, panelRef, () => setOpen(false));
   // Prevent body scroll when menu open
-  useEffect(()=> { if (open) { const prev = document.body.style.overflow; document.body.style.overflow='hidden'; return () => { document.body.style.overflow = prev; }; } }, [open]);
+  useEffect(()=> {
+    if (open) {
+      const prevOverflow = document.body.style.overflow;
+      const triggerEl = triggerRef.current; // capture for cleanup
+      document.body.style.overflow='hidden';
+      document.querySelectorAll('main, header ~ *').forEach(el => { (el as HTMLElement).inert = true; });
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        document.querySelectorAll('main, header ~ *').forEach(el => { (el as HTMLElement).inert = false; });
+        triggerEl?.focus();
+      };
+    }
+  }, [open]);
   return (
     <header className="sticky top-0 z-40 backdrop-blur border-b bg-[var(--bg)]/80">
       <div className="max-w-7xl mx-auto flex items-center gap-4 py-3 px-4">
@@ -40,11 +62,9 @@ export default function Header() {
         <span className="font-bold text-lg tracking-tight" style={{color:'var(--text)'}}>WeVote</span>
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-5 text-sm text-muted" aria-label="Main navigation">
-          <a className="hover:text-[var(--text)] transition-colors" href="/">Home</a>
-          <a className="hover:text-[var(--text)] transition-colors" href="/concern/new">Create Concern</a>
-          <a className="hover:text-[var(--text)] transition-colors" href="/ballots">Ballots</a>
-          <a className="hover:text-[var(--text)] transition-colors" href="/transparency">Transparency</a>
-          <a className="hover:text-[var(--text)] transition-colors" href="/verify">Verify</a>
+          {NAV_LINKS.map(l => (
+            <a key={l.href} className="hover:text-[var(--text)] transition-colors" href={l.href}>{l.label}</a>
+          ))}
         </nav>
         <div className="ml-auto hidden md:flex gap-2 items-center">
           <ThemeToggle />
@@ -54,7 +74,7 @@ export default function Header() {
         {/* Mobile actions */}
         <div className="ml-auto flex md:hidden items-center gap-2">
           <ThemeToggle />
-          <button aria-label="Open menu" aria-expanded={open} aria-controls="mobile-nav-panel" onClick={()=> setOpen(o=>!o)} className="btn-ghost px-2 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-teal/40">
+          <button ref={triggerRef} aria-label="Open menu" aria-expanded={open} aria-controls="mobile-nav-panel" onClick={()=> setOpen(o=>!o)} className="btn-ghost px-2 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-teal/40">
             <span className="sr-only">Menu</span>
             <svg width="20" height="20" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round"><path d="M3 6h14M3 12h14M3 18h14" /></svg>
           </button>
@@ -70,7 +90,7 @@ export default function Header() {
             id="mobile-nav-panel"
             tabIndex={-1}
             className="absolute top-0 right-0 h-full w-72 max-w-[80%] flex flex-col p-5 gap-4 animate-slideIn
-                       border-l shadow-xl overflow-y-auto text-[var(--text)]
+                       border-l shadow-xl overflow-y-auto text-[var(--text)] z-10
                        bg-[var(--panel-bg)] supports-[backdrop-filter]:bg-[var(--panel-bg)]/95
                        backdrop-blur-lg"
           >
@@ -81,13 +101,7 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col gap-1 text-sm" aria-label="Mobile navigation">
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/concern/new', label: 'Create Concern' },
-                { href: '/ballots', label: 'Ballots' },
-                { href: '/transparency', label: 'Transparency' },
-                { href: '/verify', label: 'Verify' }
-              ].map(item => (
+              {NAV_LINKS.map(item => (
                 <a
                   key={item.href}
                   onClick={()=> setOpen(false)}
