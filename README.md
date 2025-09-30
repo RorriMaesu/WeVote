@@ -4,6 +4,14 @@ Trusted civic drafting, discussion, and voting platform with verifiable tallies,
 
 > Public Repository: https://github.com/RorriMaesu/WeVote
 
+**Live Beta:** https://wevote-5400a.firebaseapp.com
+
+<div align="center">
+
+[![Support WeVote Development](web/public/support-coffee.svg)](https://buymeacoffee.com/rorrimaesu "Buy Me a Coffee – support hosting & model costs")
+
+</div>
+
 If you're reading this from a local clone acquired elsewhere, please pull updates and submit issues/PRs via the GitHub repository above. Do **not** commit any real API keys, KMS key paths, receipt secrets, or production Firebase config values. Use the provided `.env.example` placeholders.
 
 ## Monorepo Structure
