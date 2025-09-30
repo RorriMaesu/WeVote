@@ -70,10 +70,9 @@ export default function Header() {
             id="mobile-nav-panel"
             tabIndex={-1}
             className="absolute top-0 right-0 h-full w-72 max-w-[80%] flex flex-col p-5 gap-4 animate-slideIn
-                       border-l shadow-xl overflow-y-auto
-                       bg-[var(--bg)]/95 supports-[backdrop-filter]:bg-[var(--bg)]/80
-                       backdrop-blur-md
-                       dark:bg-[var(--bg)]/92"
+                       border-l shadow-xl overflow-y-auto text-[var(--text)]
+                       bg-[var(--panel-bg)] supports-[backdrop-filter]:bg-[var(--panel-bg)]/95
+                       backdrop-blur-lg"
           >
             <div className="flex items-center justify-between pr-1">
               <h2 id="mobile-menu-heading" className="font-semibold tracking-tight text-sm">Menu</h2>
@@ -93,7 +92,7 @@ export default function Header() {
                   key={item.href}
                   onClick={()=> setOpen(false)}
                   href={item.href}
-                  className="rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-brand-teal/40 hover:bg-[var(--hover)]/60 transition-colors"
+                  className="rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-brand-teal/40 transition-colors text-[var(--text)] hover:bg-[var(--hover)]"
                 >{item.label}</a>
               ))}
               <div className="pt-2 mt-2 border-t border-[var(--border)]/60 flex flex-col gap-2">
