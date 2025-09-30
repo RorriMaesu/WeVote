@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install web deps
+        run: cd web && npm ci
+      - name: Build web
+        run: cd web && npm run build
+      - name: Install function deps
+        run: cd functions && npm ci && npm run build

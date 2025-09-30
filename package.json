@@ -1,0 +1,17 @@
+{
+  "name": "wevote-monorepo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RorriMaesu/WeVote.git"
+  },
+  "private": true,
+  "workspaces": ["web", "functions", "packages/shared"],
+  "scripts": {
+    "dev:web": "pnpm --filter wevote-web dev",
+    "build:web": "pnpm --filter wevote-web build",
+    "build:functions": "pnpm --filter wevote-functions build",
+    "dev:emulators": "cd functions && npm run build && firebase emulators:start --only functions,firestore",
+    "deploy:functions": "cd functions && npm run deploy",
+    "verify:ballot": "pnpm --filter @wevote/shared build && node packages/shared/dist/verify/cli.js --ballot"
+  }
+}

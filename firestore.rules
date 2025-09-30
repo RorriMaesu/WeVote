@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function authUid() { return request.auth.uid; }
+    function tierIn(arr) { return isSignedIn() && arr.hasAny([request.auth.token.tier]); }
+    function userTierRank() { return isSignedIn() ? (
+      request.auth.token.tier == 'basic' ? 1 : 
+      request.auth.token.tier == 'verified' ? 2 : 
+      request.auth.token.tier == 'expert' ? 3 : 
+      request.auth.token.tier == 'admin' ? 4 : 0) : 0; }
+
+    match /concerns/{id} {
+      allow read: if true; // public read
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn() && request.auth.uid == resource.data.authorUid;
+    }
+
+    match /drafts/{id} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      // Allow textual/content edits but lock provenance, model metadata, authors & creation timestamp
+      allow update: if isSignedIn()
+        && request.resource.data.modelMeta == resource.data.modelMeta
+        && request.resource.data.provenance == resource.data.provenance
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.authors == resource.data.authors
+        // Server-only (Cloud Functions) may mutate these arrays; clients must not change them directly.
+        && request.resource.data.editHistory == resource.data.editHistory
+        && request.resource.data.citations == resource.data.citations
+        && request.resource.data.reviews == resource.data.reviews;
+      allow delete: if false; // no client hard deletes
+    }
+
+    match /ballots/{id} {
+      allow read: if true;
+      allow create: if tierIn(['verified','expert','admin']);
+      // Client cannot update ballots; additionally enforce immutability of tally-related fields if somehow attempted
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /votes/{id} {
+      allow read: if false; // private; transparency via tallies only
+      allow create: if isSignedIn() &&
+        // ballot must exist and user tier rank >= ballot.minTierRank
+        get(/databases/$(database)/documents/ballots/$(request.resource.data.ballotId)).data.minTierRank <= userTierRank();
+      allow update, delete: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && authUid() == uid;
+      allow create: if isSignedIn() && authUid() == uid;
+      // prevent client tier escalation; tier must remain unchanged client-side
+      allow update: if isSignedIn() && authUid() == uid && request.resource.data.tier == resource.data.tier;
+      allow delete: if false;
+    }
+
+    match /admins/{uid} {
+      allow read, write: if false; // internal gating only
+    }
+
+    match /audit_logs/{id} {
+      allow read, create, update, delete: if false; // server-only
+    }
+
+    // Publicly readable lightweight audit reports generated server-side
+    match /audit_reports/{id} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    // Public mirror subset of audit logs (redacted) written only by server
+    match /audit_public/{id} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    // Moderation reports: user write (create), no public read
+    match /moderation_reports/{id} {
+      allow create: if isSignedIn();
+      allow read: if isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      allow update, delete: if false;
+    }
+
+    // Public sanitized moderation decisions
+    match /moderation_public/{id} {
+      allow read: if true; // contains only sanitized fields
+      allow create, update, delete: if false; // server-only via privileged environment
+    }
+
+    // Public transparency ledger (append-only via server). Reads are public; writes denied.
+    match /transparency_ledger/{id} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read: if false;
+    }
+  }
+}

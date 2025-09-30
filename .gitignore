@@ -1,0 +1,30 @@
+# Node / general
+node_modules/
+.DS_Store
+dist/
+lib/
+coverage/
+.env
+.env.local
+.env.*.local
+firebase-debug.log
+.firebase/
+
+# Prevent accidental inclusion of build outputs / caches
+web/.next/
+web/out/
+functions/.env
+web/.env
+*.log
+*.pem
+!.github/
+
+# Next.js
+.next/
+out/
+
+# Functions build
+functions/lib/
+
+# Shared build
+packages/shared/dist/

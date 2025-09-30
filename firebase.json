@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "source": "functions",
+    "predeploy": [
+      "npm --prefix packages/shared run build",
+      "npm --prefix functions run build"
+    ]
+  },
+  "hosting": [
+    {
+      "site": "wevote-5400a",
+      "source": "web"
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
