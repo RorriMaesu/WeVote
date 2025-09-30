@@ -45,14 +45,9 @@ export default function Header() {
   useEffect(()=> {
     if (open) {
       const prevOverflow = document.body.style.overflow;
-      const triggerEl = triggerRef.current; // capture for cleanup
+      const triggerEl = triggerRef.current;
       document.body.style.overflow='hidden';
-      document.querySelectorAll('main, header ~ *').forEach(el => { (el as HTMLElement).inert = true; });
-      return () => {
-        document.body.style.overflow = prevOverflow;
-        document.querySelectorAll('main, header ~ *').forEach(el => { (el as HTMLElement).inert = false; });
-        triggerEl?.focus();
-      };
+      return () => { document.body.style.overflow = prevOverflow; triggerEl?.focus(); };
     }
   }, [open]);
   return (
@@ -89,10 +84,10 @@ export default function Header() {
             ref={panelRef}
             id="mobile-nav-panel"
             tabIndex={-1}
-            className="absolute top-0 right-0 h-full w-72 max-w-[80%] flex flex-col p-5 gap-4 animate-slideIn
-                       border-l shadow-xl overflow-y-auto text-[var(--text)] z-10
-                       bg-[var(--panel-bg)] supports-[backdrop-filter]:bg-[var(--panel-bg)]/95
-                       backdrop-blur-lg"
+            className="fixed top-0 right-0 h-full w-72 max-w-[80%] flex flex-col p-5 gap-4 animate-slideIn
+                       border-l shadow-xl overflow-y-auto text-[var(--text)] z-50
+                       bg-[var(--panel-bg)] backdrop-blur-lg border-[var(--border)]"
+            /* TODO: remove explicit border if design opts for borderless panel */
           >
             <div className="flex items-center justify-between pr-1">
               <h2 id="mobile-menu-heading" className="font-semibold tracking-tight text-sm">Menu</h2>
