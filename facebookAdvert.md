@@ -51,6 +51,47 @@
 
 > The detailed long-form narrative begins below (kept for broader campaigns & asset context).
 
+---
+
+## Single Organic Facebook Post (Friends & Existing Audience)
+Use this EXACTLY once to seed early organic traction. Tone: invitational, earnest, transparent.
+
+**Post Copy (Main):**
+
+Draft. Debate. Decide.  
+I’ve been building an open civic platform (WeVote) where you can draft policy ideas WITH transparent AI assist, refine them together, and cast verifiable votes (each vote gives you a cryptographic receipt you can later check).  
+
+The core works: draft generation, ballots (incl. ranked choice), receipt verification, and a public hash‑chained tally ledger.  
+
+Now I need a small crew of early volunteer collaborators to help finish the trust, UX, and transparency roadmap. NO prior experience required — we can pair using AI coding helpers like GitHub Copilot & inline explainers. If you can:
+- click around and note rough edges
+- propose UI polish / accessibility tweaks
+- test a vote & confirm the receipt
+- suggest better wording for onboarding
+- help document or triage ideas
+
+…you’re qualified. (If you do know TypeScript / Firebase / design systems: even better.)
+
+**Try it:** https://wevote-5400a.firebaseapp.com  
+Open a concern → generate drafts → inspect the Transparency page → share feedback.  
+
+If the mission resonates and you want to accelerate hosting + model costs, a tiny boost here means a lot: https://buymeacoffee.com/rorrimaesu (optional; using that support strictly for infra + inference credits).  
+
+Comment or DM “I’m in” and I’ll spin up a small kickoff thread with lightweight starter tasks you can claim in minutes. Let’s build a civic tool that’s actually verifiable.  
+
+— Thanks for reading & for any signal boost 🙏
+
+**Suggested First Comment (add right after posting to anchor engagement):**
+“Starter tasks (claim one by replying): 1) Mobile nav quick test on your device size. 2) Copy edit the ballot creation form. 3) Stress‑test draft generation (see if caching prevents duplicates). 4) Verify a receipt and paste only the short code (no personal data). More incoming!”
+
+**Posting Tips:**
+- Post at a time your friend graph is active (evening or lunch).  
+- Reply fast to early comments (FB boosts early interaction velocity).  
+- React (👍 / ❤️) to each volunteer reply to reinforce micro‑commitment.  
+- 48h later: follow‑up comment with mini progress (“We added X, need 2 testers for Y”). Avoid a brand new top‑level post until initial wave cools.  
+
+---
+
 
 **A trustworthy, auditable public square where people co‑create policy ideas, refine them with transparent AI assistance, and cast verifiable votes.**
 
